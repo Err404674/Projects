@@ -139,7 +139,7 @@ Tooltip = 'Prevents you from disconnecting after 20 minutes',
 Default = false,
 Disabled = false,
 Visible = true,
-Risky = true,
+Risky = false,
 
 Callback = function(Value)
 print(value)
