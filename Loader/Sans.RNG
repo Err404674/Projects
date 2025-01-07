@@ -1,5 +1,7 @@
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/'
 
+Players = cloneref(game:GetService("Players"))
+
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local Themes = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local Saves = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
@@ -58,10 +60,10 @@ local CDBWeapon = LeftGBCustom:AddButton({
 	Text = 'Corrupted Dummy Blaster',
 	Func = function()
 		if not game.Players.LocalPlayer.Backpack:FindFirstChild("CORRUPTED DUMMY BLASTER") then
-        Library:Notify("Successfuly gave the weapon!")
+        Library:Notify("Successfuly gave the weapon!", nil, 4590657391)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/CDB",true))()
         else
-        Library:Notify("Weapon already exists.")
+        Library:Notify("Weapon already exists.", nil, 4590657391)
         end
 	end,
 	DoubleClick = false,
@@ -74,10 +76,10 @@ local HPWeapon = LeftGBCustom:AddButton({
 	Text = 'Hollow Purple',
 	Func = function()
 		if not game.Players.LocalPlayer.Backpack:FindFirstChild("Purple.") then
-        Library:Notify("Successfuly gave the weapon!")
+        Library:Notify("Successfuly gave the weapon!", nil, 4590657391)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/HP",true))()
         else
-        Library:Notify("Weapon already exists.")
+        Library:Notify("Weapon already exists.", nil, 4590657391)
         end
 	end,
 	DoubleClick = false,
@@ -128,4 +130,34 @@ Toggles.NoCD:OnChanged(function()
     wait(0.01)
     lowcooldown()
     until Toggles.NoCD.Value == false
+end)
+
+LeftGB:AddToggle('AntiAfk', {
+Text = 'Anti-Afk',
+Tooltip = 'Prevents you from disconnecting after 20 minutes',
+
+Default = false,
+Disabled = false,
+Visible = true,
+Risky = true,
+
+Callback = function(Value)
+print(value)
+end
+})
+
+Toggles.AntiAfk:OnChanged(function()
+if Toggles.AntiAfk.Value == true then
+Library:Notify("Anti-Afk is on!", nil, 4590657391)
+else
+Library:Notify("Anti-Afk is off!", nil, 4590657391)
+end
+repeat
+wait(0.1)
+Players.LocalPlayer.Idled:Connect(function()
+local VirtualUser = game:GetService("VirtualUser")
+VirtualUser:CaptureController()
+VirtualUser:ClickButton2(Vector2.new())
+end)
+until Toggles.AntiAfk.Value == false
 end)
