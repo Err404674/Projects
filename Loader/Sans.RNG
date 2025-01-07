@@ -105,18 +105,18 @@ local unequiper = "Unequip"
 
 local function lowcooldown()
     local player = game.Players.LocalPlayer
-    local equippedWeaponName = tostring(player.EquippedWeapon.Value)
+    local currentweapon = tostring(player.EquippedWeapon.Value)
     local character = player.Character
     local backpack = player.Backpack
 
-    local weapon = character:FindFirstChild(equippedWeaponName) or backpack:FindFirstChild(equippedWeaponName)
+    local weapon = character:FindFirstChild(currentweapon) or backpack:FindFirstChild(currentweapon)
 
     if weapon and weapon.Parent == character and weapon:IsA("Tool") then
         weapon.Activated:Connect(function()
-        task.wait(1.15)
-        game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(equippedWeaponName, "Weapon", unequiper)   
+        task.wait(0.25)
+        game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(currentweapon, "Weapon", unequiper)   
         task.wait()
-        game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(equippedWeaponName, "Weapon", equiper)
+        game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(currentweapon, "Weapon", equiper)
         task.wait(0.1)
         character.Humanoid:EquipTool(weapon)
         end)
