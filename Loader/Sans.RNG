@@ -60,10 +60,10 @@ local CDBWeapon = LeftGBCustom:AddButton({
 	Text = 'Corrupted Dummy Blaster',
 	Func = function()
 		if not game.Players.LocalPlayer.Backpack:FindFirstChild("CORRUPTED DUMMY BLASTER") then
-        Library:Notify("Successfuly gave the weapon!", nil, 4590657391)
+        Library:Notify("Successfuly gave the weapon!", nil, 8486683243)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/CDB",true))()
         else
-        Library:Notify("Weapon already exists.", nil, 4590657391)
+        Library:Notify("Weapon already exists.", nil, 8486683243)
         end
 	end,
 	DoubleClick = false,
@@ -76,10 +76,10 @@ local HPWeapon = LeftGBCustom:AddButton({
 	Text = 'Hollow Purple',
 	Func = function()
 		if not game.Players.LocalPlayer.Backpack:FindFirstChild("Purple.") then
-        Library:Notify("Successfuly gave the weapon!", nil, 4590657391)
+        Library:Notify("Successfuly gave the weapon!", nil, 8486683243)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/HP",true))()
         else
-        Library:Notify("Weapon already exists.", nil, 4590657391)
+        Library:Notify("Weapon already exists.", nil, 8486683243)
         end
 	end,
 	DoubleClick = false,
@@ -148,9 +148,9 @@ end
 
 Toggles.AntiAfk:OnChanged(function()
 if Toggles.AntiAfk.Value == true then
-Library:Notify("Anti-Afk is on!", nil, 4590657391)
+Library:Notify("Anti-Afk is on!", nil, 8486683243)
 else
-Library:Notify("Anti-Afk is off!", nil, 4590657391)
+Library:Notify("Anti-Afk is off!", nil, 8486683243)
 end
 repeat
 wait(0.1)
