@@ -1,1 +1,3 @@
 if game.PlaceId == 15311521477 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/Loader/Sans.RNG",true))()
+end
