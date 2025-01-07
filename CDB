@@ -1,0 +1,98 @@
+--//Functions\\--
+loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/refs/heads/main/Functions.lua",true))()
+
+--//Assets\\--
+local assets = {
+    Blaster = LoadCustomInstance("https://github.com/Err404674/spp/blob/main/dblaster.rbxm?raw=true")
+}
+
+--//Variables\\--
+local Player = game.Players.LocalPlayer
+local Char = Player.Character
+local Root = Char.HumanoidRootPart :: BasePart
+local TweenService = game:GetService("TweenService")
+
+local Tool = Instance.new("Tool")
+Tool.CanBeDropped = false
+Tool.RequiresHandle = false
+Tool.Name = "CORRUPTED DUMMY BLASTER"
+Tool.Parent = Player.Backpack
+
+Tool.Activated:Connect(function()
+local DBlast = assets.Blaster:Clone()
+DBlast.Parent = workspace
+DBlast:PivotTo(Root.CFrame*CFrame.new(0,0,-5))
+local b = DBlast.Beam
+
+b.Touched:Connect(function(p)
+    local h = p.Parent
+    if h and not h:IsDescendantOf(Player.Character) then
+        local clickPart = h:FindFirstChild("ClickablePart")
+        if clickPart and clickPart:FindFirstChild("ClickDetector") then
+           fireclickdetector(clickPart.ClickDetector)
+        end
+    end
+end)
+
+local GB = {
+	["Beam"] = DBlast.Beam,
+	["BeamBall"] = DBlast.BeamBall,
+	["ChargeBall"] = DBlast.ChargeBall,
+	["Charge"] = DBlast.Head.Charge,
+	["Shoot"] = DBlast.Head.Shoot,
+	["Shoot2"] = DBlast.Head.Shoot2
+}
+
+local ogheadcf = DBlast.Head.CFrame
+
+function color()
+	while task.wait(0.1) do
+		GB.Beam.Color = Color3.fromHex("#681af7")
+		GB.BeamBall.Color = Color3.fromHex("#681af7")
+		task.wait(0.1)
+		GB.Beam.Color = Color3.fromHex("#000000")
+		GB.BeamBall.Color = Color3.fromHex("#000000")
+	end
+end
+
+task.wait(0.1)
+coroutine.resume(coroutine.create(function()
+	GB.ChargeBall.Transparency = 0
+	DBlast.Head.Size = Vector3.new(0,0,0)
+	DBlast.Head.Transparency = 1
+	GB.BeamBall.Size = Vector3.new(0,0,0)
+	DBlast.Head.Static:Emit(math.random(15,20))
+	DBlast.Head.Spawn.Enabled = true
+	local T = TweenService:Create(GB.ChargeBall, TweenInfo.new(0.7, Enum.EasingStyle.Exponential, Enum.EasingDirection.In), {Size = Vector3.new(0,0,0), Transparency = 1})
+	T:Play()
+	local T = TweenService:Create(DBlast.Head, TweenInfo.new(0.7, Enum.EasingStyle.Circular, Enum.EasingDirection.Out), {Size = Vector3.new(5,3,3), Transparency = 0})
+	T:Play()
+	GB.Charge:Play()
+	T.Completed:Wait()
+	task.wait(0.3)
+	local T = TweenService:Create(GB.Beam, TweenInfo.new(0.55, Enum.EasingStyle.Circular, Enum.EasingDirection.In), {Size = Vector3.new(140,7,7), CFrame = GB.Beam.CFrame*CFrame.new(69,0,0), Transparency = 0})
+	T:Play()
+	local T = TweenService:Create(GB.BeamBall, TweenInfo.new(0.25, Enum.EasingStyle.Circular, Enum.EasingDirection.In), {Size = Vector3.new(2.5,2.5,2.5), Transparency = 0})
+	T:Play()
+	coroutine.resume(coroutine.create(function()
+		color()
+	end))
+	GB.Shoot:Play()
+	GB.Shoot2:Play()
+	DBlast.Head.Attachment.ParticleEmitter:Emit(25)
+	DBlast.Head.Attachment.Shockwave:Emit(1)
+	T.Completed:Wait()
+	task.wait(1.25)
+	DBlast.Head.Spawn.Enabled = false
+	local T = TweenService:Create(GB.Beam, TweenInfo.new(1, Enum.EasingStyle.Circular, Enum.EasingDirection.Out), {Size = Vector3.new(140,0,0), Transparency = 1})
+	T:Play()
+	local T = TweenService:Create(GB.BeamBall, TweenInfo.new(1, Enum.EasingStyle.Circular, Enum.EasingDirection.Out), {Size = Vector3.new(0,0,0), Transparency = 1})
+	T:Play()
+	local T = TweenService:Create(GB.Shoot, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {PlaybackSpeed = 0})
+	T:Play()
+	local T = TweenService:Create(DBlast.Head, TweenInfo.new(1, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut), {Size = Vector3.new(0,0,0), Transparency = 1})
+	T:Play()
+	T.Completed:Wait()
+	DBlast:Destroy()
+end))
+end)
