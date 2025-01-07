@@ -1,0 +1,131 @@
+local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/'
+
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local Themes = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local Saves = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local Options = Library.Options
+local Toggles = Library.Toggles
+
+Library.ShowToggleFrameInKeybinds = true 
+Library.ShowCustomCursor = false
+Library.NotifySide = "Right"
+
+local Menu = Library:CreateWindow({
+    Title = 'SANS.RNG (PLACE ID: '..game.PlaceId..')',
+	Center = true,
+	AutoShow = true,
+	Resizable = true,
+	ShowCustomCursor = false,
+	NotifySide = "Right",
+	TabPadding = 8,
+	MenuFadeTime = 0
+})
+
+local Tabs = {
+    Main = Menu:AddTab('Main'),
+    Customs = Menu:AddTab('Custom Weapons')
+}
+
+local LeftGB = Tabs.Main:AddLeftGroupbox('Groupbox')
+local LeftGBCustom = Tabs.Customs:AddLeftGroupbox('Groupbox')
+
+LeftGB:AddToggle('Autoclick', {
+    Text = 'Autoclick',
+	Tooltip = 'Clicks every existing sans.',
+
+	Default = false,
+	Disabled = false,
+	Visible = true,
+	Risky = false,
+
+    Callback = function(Value)
+        print(value)
+    end
+})
+
+Toggles.Autoclick:OnChanged(function()
+    repeat
+    wait(0.05)
+    for i,v in game.Workspace.NPCs:GetDescendants() do
+    if v:IsA("ClickDetector") then
+    fireclickdetector(v)
+    end
+    end
+    until Toggles.Autoclick.Value == false
+end)
+
+local CDBWeapon = LeftGBCustom:AddButton({
+	Text = 'Corrupted Dummy Blaster',
+	Func = function()
+		if not game.Players.LocalPlayer.Backpack:FindFirstChild("CORRUPTED DUMMY BLASTER") then
+        Library:Notify("Successfuly gave the weapon!")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/CDB",true))()
+        else
+        Library:Notify("Weapon already exists.")
+        end
+	end,
+	DoubleClick = false,
+
+	Disabled = false,
+	Visible = true
+})
+
+local HPWeapon = LeftGBCustom:AddButton({
+	Text = 'Hollow Purple',
+	Func = function()
+		if not game.Players.LocalPlayer.Backpack:FindFirstChild("Purple.") then
+        Library:Notify("Successfuly gave the weapon!")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/HP",true))()
+        else
+        Library:Notify("Weapon already exists.")
+        end
+	end,
+	DoubleClick = false,
+
+	Disabled = false,
+	Visible = true
+})
+
+LeftGB:AddToggle('NoCD', {
+    Text = 'Low Cooldown',
+    Tooltip = 'Lowers weapon CD (ATTACKS DEAL DAMAGE FOR ONLY A SHORT PERIOD OF TIME)',
+
+    Default = false,
+    Disabled = false,
+    Visible = true,
+    Risky = true,
+
+    Callback = function(Value)
+        print(value)
+    end
+})
+
+local equiper = "Equip"
+local unequiper = "Unequip"
+
+local function lowcooldown()
+    local player = game.Players.LocalPlayer
+    local equippedWeaponName = tostring(player.EquippedWeapon.Value)
+    local character = player.Character
+    local backpack = player.Backpack
+
+    local weapon = character:FindFirstChild(equippedWeaponName) or backpack:FindFirstChild(equippedWeaponName)
+
+    if weapon and weapon.Parent == character and weapon:IsA("Tool") then
+        weapon.Activated:Connect(function()
+        task.wait(1.15)
+        game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(equippedWeaponName, "Weapon", unequiper)   
+        task.wait()
+        game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(equippedWeaponName, "Weapon", equiper)
+        task.wait(0.1)
+        character.Humanoid:EquipTool(weapon)
+        end)
+    end
+end
+
+Toggles.NoCD:OnChanged(function()
+    repeat
+    wait(0.01)
+    lowcooldown()
+    until Toggles.NoCD.Value == false
+end)
