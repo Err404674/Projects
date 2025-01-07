@@ -1,0 +1,117 @@
+
+local TweenService = game:GetService("TweenService")
+local Plr = game.Players.LocalPlayer
+local Chr = Plr.Character
+local Hrp = Chr.HumanoidRootPart
+
+function updateBobbleEffect()
+	for i = 1, 25 do
+		local currentTime = tick()
+		local bobbleX = math.random(-1000,1000)/250
+		local bobbleY = math.random(-1000,1000)/250
+		--local bobbleX = math.cos(currentTime * 5000)
+		--local bobbleY = math.abs(math.sin(currentTime * 5000))
+		local bobble = Vector3.new(bobbleX, bobbleY, 0)
+		Chr.Humanoid.CameraOffset = bobble
+		--humanoid.CameraOffset = humanoid.CameraOffset:lerp(bobble, 0.1)
+		task.wait()
+	end
+
+	Chr.Humanoid.CameraOffset = Vector3.new(0,0,0)
+end
+
+function CreateSound(soundid)
+local Sound = Instance.new("Sound",workspace)
+Sound.SoundId = soundid
+Sound.Volume = 5
+Sound:Play()
+task.wait(Sound.TimeLength)
+Sound:Destroy()
+end
+
+function CreateObject(name,shape,size,cframe,color)
+local Object = Instance.new("Part")
+Object.Name = name
+Object.Shape = shape
+Object.Size = Vector3.new(15,15,15)
+Object.Color = Color3.fromHex(color)
+Object.Anchored = true
+Object.CanCollide = false
+Object.CFrame = cframe
+Object.Massless = true
+Object.Parent = workspace
+end
+
+function CreateWeapon(name,tooltip)
+local Tool = Instance.new("Tool", Plr.Backpack)
+Tool.Name = name
+Tool.RequiresHandle = false
+Tool.CanBeDropped = false
+Tool.ToolTip = tooltip
+end
+
+CreateWeapon("Purple.","the imaginary technique that gojo uses from jjk?!?!?!?!??!?!?!??!?!?!?")
+
+local Tool = Plr.Backpack:FindFirstChild("Purple.")
+
+Tool.Activated:Connect(function()
+local Center = Instance.new("Part")
+Center.Anchored = true
+Center.Size = Vector3.new(5,5,5)
+Center.CFrame = Hrp.CFrame*CFrame.new(0,0,-15)
+Center.CanCollide = false
+Center.Transparency = 0
+CreateObject("Red",Enum.PartType.Ball,Vector3.new(1,1,1),Hrp.CFrame*CFrame.new(15,0,-15),"#ff3b3b")
+CreateObject("Blue",Enum.PartType.Ball,Vector3.new(1,1,1),Hrp.CFrame*CFrame.new(-15,0,-15),"#3b79ff")
+workspace.Red.Material = Enum.Material.Neon
+workspace.Blue.Material = Enum.Material.Neon
+task.wait(1.5)
+local T = TweenService:Create(workspace.Red, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {CFrame = Center.CFrame})
+T:Play()
+local T = TweenService:Create(workspace.Blue, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {CFrame = Center.CFrame})
+T:Play()
+T.Completed:Wait()
+workspace.Red:Destroy()
+workspace.Blue:Destroy()
+Center:Destroy()
+CreateObject("Purple",Enum.PartType.Ball,Vector3.new(1,1,1),Hrp.CFrame*CFrame.new(0,5,-35),"#7b4aff")
+workspace.Purple.Material = Enum.Material.Neon
+local T = TweenService:Create(workspace.Purple, TweenInfo.new(2, Enum.EasingStyle.Exponential), {Size = Vector3.new(59,59,59)})
+T:Play()
+CreateSound("rbxassetid://9116279942")
+T.Completed:Wait()
+
+task.spawn(function()
+updateBobbleEffect()
+CreateSound("rbxassetid://821439273")
+end)
+
+local connect = game:GetService("RunService").Heartbeat:Connect(function()
+workspace.Purple.CFrame = workspace.Purple.CFrame*CFrame.new(0,0,-2)
+end)
+local connect2 = nil
+workspace.Purple.Touched:Connect(function(hit)
+    local CD = hit.Parent:FindFirstChild("ClickablePart")
+    if CD and CD:FindFirstChild("ClickDetector") then
+        connect2 = game:GetService("RunService").Heartbeat:Connect(function()
+            if CD and CD.Parent and CD.Parent.Parent then
+                fireclickdetector(CD.ClickDetector)
+            else
+                task.delay(0.1, function()
+                connect2:Disconnect()
+                end)
+            end
+        end)
+        
+        task.delay(2.5, function()
+            if connect2 then
+                connect2:Disconnect()
+            end
+        end)
+    end
+end)
+task.delay(2, function()
+connect:Disconnect()
+workspace.Purple:Destroy()
+end)
+end)
