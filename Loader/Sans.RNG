@@ -1,6 +1,9 @@
 local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/'
 
 Players = cloneref(game:GetService("Players"))
+Plr = Players.LocalPlayer
+
+local OGWS = Plr.Character.Humanoid.WalkSpeed
 
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local Themes = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
@@ -25,11 +28,17 @@ local Menu = Library:CreateWindow({
 
 local Tabs = {
     Main = Menu:AddTab('Main'),
-    Customs = Menu:AddTab('Custom Weapons')
+    Customs = Menu:AddTab('Custom Weapons'),
+    Settings = Menu:AddTab('UI Settings')
 }
 
-local LeftGB = Tabs.Main:AddLeftGroupbox('Groupbox')
-local LeftGBCustom = Tabs.Customs:AddLeftGroupbox('Groupbox')
+local LeftGB = Tabs.Main:AddLeftGroupbox('Main')
+local LeftGBRisk = Tabs.Main:AddLeftGroupbox('Useless')
+local RightGB = Tabs.Main:AddRightGroupbox('Player')
+
+local LeftGBCustom = Tabs.Customs:AddLeftGroupbox('Weapons')
+
+local SettingsGB = Tabs.Settings:AddLeftGroupbox('Settings')
 
 LeftGB:AddToggle('Autoclick', {
     Text = 'Autoclick',
@@ -88,7 +97,7 @@ local HPWeapon = LeftGBCustom:AddButton({
 	Visible = true
 })
 
-LeftGB:AddToggle('NoCD', {
+LeftGBRisk:AddToggle('NoCD', {
     Text = 'Low Cooldown',
     Tooltip = 'Lowers weapon CD (ATTACKS DEAL DAMAGE FOR ONLY A SHORT PERIOD OF TIME)',
 
@@ -115,7 +124,7 @@ local function lowcooldown()
 
     if weapon and weapon.Parent == character and weapon:IsA("Tool") then
         weapon.Activated:Connect(function()
-        task.wait(0.25)
+        task.wait(0.85)
         game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(currentweapon, "Weapon", unequiper)   
         task.wait()
         game:GetService("ReplicatedStorage").EquipOrUnequipItems:InvokeServer(currentweapon, "Weapon", equiper)
@@ -161,3 +170,53 @@ VirtualUser:ClickButton2(Vector2.new())
 end)
 until Toggles.AntiAfk.Value == false
 end)
+
+RightGB:AddSlider('Walkspeed', {
+	Text = 'Walkspeed',
+	Default = OGWS,
+	Min = 16,
+	Max = 125,
+	Rounding = 1,
+	Compact = false,
+
+	Callback = function(Value)
+		print(Value)
+        Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end,
+
+	Disabled = false,
+	Visible = true,
+})
+
+LeftGB:AddToggle('Godmode', {
+    Text = 'Godmode',
+    Tooltip = 'Makes you invincible to enemy attacks (BUGGY)',
+    
+    Default = false,
+    Disabled = false,
+    Visible = true,
+    Risky = true,
+    
+    Callback = function(Value)
+    print(value)
+    end
+})
+
+Toggles.Godmode:OnChanged(function()
+    if Toggles.Godmode.Value == true then
+        local godmodeconnect = game:GetService('RunService').Heartbeat:Connect(function()
+            for i,v in ipairs(game.Workspace:GetDescendants()) do
+                if v:IsA('BasePart') and v:FindFirstChild('TouchInterest') then
+                    v.CanTouch = false
+                end
+            end
+        end)
+    elseif Toggles.Godmode.Value == false then
+        godmodeconnect:Disconnect()
+    end
+end)
+
+SettingsGB:AddLabel('UI Keybind'):AddKeyPicker('MenuKeybind', { Default = 'LeftControl', NoUI = true, Text = 'UI Keybind' })
+SettingsGB:AddButton('Unload', function() Library:Unload() end)
+
+Library.ToggleKeybind = Options.MenuKeybind
