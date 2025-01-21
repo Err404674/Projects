@@ -3,7 +3,7 @@ local repo = 'https://raw.githubusercontent.com/mstudio45/LinoriaLib/main/'
 Players = cloneref(game:GetService("Players"))
 Plr = Players.LocalPlayer
 
-local hrp = game.Workspace.Enemies:WaitForChild('HumanoidRootPart',true)
+local hrp = game.Workspace.Enemies:FindFirstChild('HumanoidRootPart',true)
 
 local OGWS = Plr.Character.Humanoid.WalkSpeed
 
