@@ -4,7 +4,7 @@ local Plr = game.Players.LocalPlayer
 local Chr = Plr.Character
 local Hrp = Chr.HumanoidRootPart
 
-function updateBobbleEffect()
+function bobble()
 	for i = 1, 25 do
 		local currentTime = tick()
 		local bobbleX = math.random(-1000,1000)/250
@@ -82,7 +82,7 @@ CreateSound("rbxassetid://9116279942")
 T.Completed:Wait()
 
 task.spawn(function()
-updateBobbleEffect()
+bobble()
 CreateSound("rbxassetid://821439273")
 end)
 
