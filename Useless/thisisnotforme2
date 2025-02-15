@@ -1,9 +1,0 @@
-queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport
-
-local shoutouttofemboysfrlgottabeoneofmyfavoritegenders = false
-game.Players.LocalPlayer.OnTeleport:Connect(function()
-    if queueteleport and (not shoutouttofemboysfrlgottabeoneofmyfavoritegenders) then
-        shoutouttofemboysfrlgottabeoneofmyfavoritegenders = true
-        queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/Useless/thisisnotforme",true))()')
-    end
-end)
