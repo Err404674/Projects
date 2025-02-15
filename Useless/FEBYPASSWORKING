@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Err404674/Projects/refs/heads/main/Loader/Sans.RNG"))()
 
 printidentity()
 
